@@ -42,7 +42,7 @@ def start():
     """
     print(json.dumps(data))
 
-    color = "#00FF00"
+    color = "#FFFF00"
 
     return start_response(color)
 
@@ -69,17 +69,14 @@ def isFree(direction, data):
 
     width = data["board"]["width"]
 
-    if newY > width or newY < 0 or newX > width or newX < 0:
+    if newY > width -1 or newY < 0 or newX > width -1 or newX < 0:
         print("bad direction: " + direction)
         return False
 
+
     for part in data["you"]["body"]:
-        if part["y"] == newY:
+        if part["y"] == newY and part["x"] == newX:
             return False
-        if part["x"] == newX:
-            return False
-
-
 
     return True
 
@@ -93,7 +90,12 @@ def move():
     """
     print(json.dumps(data))
 
-    directions = ['up',
+    for d in ["up", "right", "down", "left"]:
+        if isFree(d, data) == True:
+            print("chose direction: " + d)
+            return move_response(d)
+
+    """directions = ['up',
     'left',
     'down',
     'right',
@@ -138,12 +140,8 @@ def move():
                                     'down',
                                     'right',
     ]
-    return move_response(directions[data["turn"]])
+    return move_response(directions[data["turn"]])"""
 
-    for d in ["up", "down", "left", "right"]:
-        if isFree(d, data) == True:
-            print("chose direction: " + d)
-            return move_response(d)
 
 
 @bottle.post('/end')

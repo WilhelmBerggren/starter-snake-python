@@ -26,11 +26,11 @@ def isFree(direction, data):
         print("bad direction: " + direction)
         return False
 
-    for part in data["you"]["body"]:
+    """for part in data["you"]["body"]:
         if part["y"] == newY:
             return False
         if part["x"] == newX:
-            return False
+            return False"""
 
 
 
