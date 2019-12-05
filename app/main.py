@@ -47,6 +47,42 @@ def start():
     return start_response(color)
 
 
+def isFree(direction, data):
+    posY = data["you"]["body"][0]["y"]
+    posX = data["you"]["body"][0]["x"]
+    newY = posY + 0
+    newX = posX + 0
+
+    if direction == "up":
+        newY = posY - 1
+    if direction == "down":
+        newY = posY + 1
+
+    if direction == "left":
+        newX = posX - 1
+    if direction == "right":
+        newX = posX + 1
+
+    print({"dir": direction})
+    print({"posX" : posX, "newx": newX})
+    print({"posy" : posY, "newy": newY})
+
+    width = data["board"]["width"]
+
+    if newY > width or newY < 0 or newX > width or newX < 0:
+        print("bad direction: " + direction)
+        return False
+
+    for part in data["you"]["body"]:
+        if part["y"] == newY:
+            return False
+        if part["x"] == newX:
+            return False
+
+
+
+    return True
+
 @bottle.post('/move')
 def move():
     data = bottle.request.json
@@ -57,32 +93,57 @@ def move():
     """
     print(json.dumps(data))
 
-
-
     directions = ['up',
+    'left',
+    'down',
+    'right',
+    'up',
+    'up',
         'left',
         'down',
-        'down',
         'right',
-        'right',
-        'right',
-        'right',
+    'up',
         'up',
+            'left',
+            'down',
+            'right',
         'up',
-        'up',
-        'up',
-        'up',
-        'left',
-        'left',
-        'left',
-        'down',
-        'left',
-        'right',
+            'up',
+                'left',
+                'down',
+                'right',
+            'up',
+                'up',
+                    'left',
+                    'down',
+                    'right',
+                'up',
+                    'up',
+                        'left',
+                        'down',
+                        'right',
+                    'up',
+                        'up',
+                            'left',
+                            'down',
+                            'right',
+                        'up',
+                            'up',
+                                'left',
+                                'down',
+                                'right',
+                            'up',
+                                'up',
+                                    'left',
+                                    'down',
+                                    'right',
     ]
-    direction = directions[data['turn']]
-    """direction = random.choice(directions)"""
+    return move_response(directions[data["turn"]])
 
-    return move_response(direction)
+    for d in ["up", "down", "left", "right"]:
+        if isFree(d, data) == True:
+            print("chose direction: " + d)
+            return move_response(d)
 
 
 @bottle.post('/end')
